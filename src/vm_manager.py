@@ -76,6 +76,14 @@ class VMManager:
             dom = self.conn.lookupByName(vm_name)
             dom.destroy()  
             dom.undefine()  
+            # Delete vm from log
+            with open("vm_info.txt", "r") as f:
+              logs = f.readlines()
+            with open("vm_info.txt", "w") as f:
+              for line in logs:
+                if vm_name not in line:
+                  f.write(line)
+                  
             return f"VM {vm_name} deleted successfully"
         except libvirt.libvirtError as e:
             return str(e)
