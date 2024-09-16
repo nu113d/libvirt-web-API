@@ -1,19 +1,19 @@
 #!/usr/bin/python3
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, escape
 from vm_manager import VMManager
 from users import create_user, verify_user
 
 app = Flask(__name__)
 
-# Replace based on weather you run the service locally or remotely
+# Replace based on whether you run the service locally or remotely
 # For local the URI is driver:///system
 # For remote the URI is driver[+transport]://[username@][hostname][:port]/[path][?extraparameters]
 # Please read the documentation at https://libvirt.gitlab.io/libvirt-appdev-guide-python/libvirt_application_development_guide_using_python-Connections-URI_Formats.html
 libvirt_uri = "qemu:///system"
 vm_manager = VMManager(libvirt_uri)
 
-@app.route('/create_user', methods=['POST'])
+@app.route('/create_user', methods=['GET'])
 def handle_create_user():
     user_id = create_user()
     return jsonify({"user_id": user_id})
